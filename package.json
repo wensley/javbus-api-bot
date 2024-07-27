@@ -1,5 +1,5 @@
 {
-  "name": "javbus-api",
+  "name": "javbus-api-bot",
   "version": "1.0.0",
   "description": "A project to interact with the JavbusAPI Bot",
   "main": "index.js",
