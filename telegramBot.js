@@ -4,7 +4,7 @@ const axios = require('axios');
 const token = '123456789:xxxxxxxxxxxxxxxxxxxxxx';  // 请替换为您的Telegram Bot Token
 const bot = new TelegramBot(token, { polling: true });
 const API_BASE_URL = 'https://xyz.xyz.xyz/api';  // 替换为您的API URL
-const PIKPAK_PROMOTION_ID = 'xxx';
+
 
 // 发送请求的函数
 async function sendRequest(url, options = {}) {
@@ -146,7 +146,7 @@ bot.onText(/\/id (.+)/, async (msg, match) => {
             ...(magnets && magnets.length > 0 ? [
               {
                 text: "在线播放",
-                url: `https://mypikpak.com/drive/url-checker?url=${encodeURIComponent(magnets[0].link)}&__source=${PIKPAK_PROMOTION_ID}&__campaign=${PIKPAK_PROMOTION_ID}`
+                url: `https://keepshare.org/gc6ia801/${encodeURIComponent(magnets[0].link)}`
               }
             ] : [])
           ],
