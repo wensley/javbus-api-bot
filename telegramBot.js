@@ -5,6 +5,7 @@ const token = '123456789:xxxxxxxxxxxxxxxxxxxxxx';  // 请替换为您的Telegram
 const bot = new TelegramBot(token, { polling: true });
 const API_BASE_URL = 'https://xyz.xyz.xyz/api';  // 替换为您的API URL
 
+//项目地址：https://github.com/wensley/javbus-api-bot
 
 // 发送请求的函数
 async function sendRequest(url, options = {}) {
@@ -151,7 +152,7 @@ bot.onText(/\/id (.+)/, async (msg, match) => {
             ] : [])
           ],
           [
-            { text: "项目地址", url: "https://github.com/wensley/javbus-api" },
+            { text: "项目地址", url: "https://github.com/wensley/javbus-api-bot" },
             { text: "关注频道", url: "https://t.me/zhcnxyz" }
           ]
         ]
