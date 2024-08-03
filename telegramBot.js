@@ -143,7 +143,7 @@ bot.onText(/\/id (.+)/, async (msg, match) => {
       reply_markup: {
         inline_keyboard: [
           [
-            { text: "截图", callback_data: `sample_${movieId}_0` },
+            { text: "预览截图", callback_data: `sample_${movieId}_0` },
             ...(magnets && magnets.length > 0 ? [
               {
                 text: "在线播放",
@@ -253,13 +253,18 @@ bot.on('callback_query', async (query) => {
   if (data.startsWith('sample_')) {
     const [_, movieId, pageStr] = data.split('_');
     const page = parseInt(pageStr);
-    console.log(`[INFO] User ${query.from.username} requested sample images for movie ID: ${movieId}, page: ${page}`);
+    console.log(`[INFO] User ${query.from.username} (ID: ${query.from.id}) requested sample images for movie ID: ${movieId}, page: ${page}`);
+    
     try {
       const movie = await sendRequest(`${API_BASE_URL}/movies/${movieId}`);
+      console.log(`[INFO] Successfully fetched movie data for ID: ${movieId}`);
+      
       if (movie.samples && movie.samples.length > 0) {
         const startIndex = page * 5;
         const endIndex = Math.min(startIndex + 5, movie.samples.length);
         const samples = movie.samples.slice(startIndex, endIndex);
+        
+        console.log(`[INFO] Sending ${samples.length} sample images for movie ID: ${movieId}, page: ${page}`);
         
         // 创建媒体组
         const mediaGroup = samples.map(sample => ({
@@ -269,6 +274,7 @@ bot.on('callback_query', async (query) => {
         
         // 发送媒体组
         await bot.sendMediaGroup(chatId, mediaGroup);
+        console.log(`[INFO] Successfully sent media group to user ${query.from.username} (ID: ${query.from.id})`);
         
         // 如果还有更多图片，添加"下一页"按钮
         if (endIndex < movie.samples.length) {
@@ -279,16 +285,22 @@ bot.on('callback_query', async (query) => {
               ]]
             }
           });
+          console.log(`[INFO] Sent "Next Page" button for movie ID: ${movieId}, next page: ${page + 1}`);
+        } else {
+          console.log(`[INFO] No more pages available for movie ID: ${movieId}`);
         }
       } else {
         await bot.sendMessage(chatId, '没有可用的截图。');
+        console.log(`[INFO] No samples available for movie ID: ${movieId}`);
       }
     } catch (error) {
-      console.error(`[ERROR] Error fetching sample images: ${error.message}`);
+      console.error(`[ERROR] Error fetching sample images for movie ID ${movieId}: ${error.message}`);
       await bot.sendMessage(chatId, '获取截图时出错。');
     }
+    
     // 回应回调查询以消除加载状态
     await bot.answerCallbackQuery(query.id);
+    console.log(`[INFO] Answered callback query for user ${query.from.username} (ID: ${query.from.id})`);
   }
 });
 
